@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek AI Chat</title>
+    <script>
+        async function sendMessage() {
+            let userInput = document.getElementById("user-input").value;
+            if (!userInput) return;
+
+            let chatBox = document.getElementById("chat-box");
+            chatBox.innerHTML += `<p><strong>你：</strong> ${userInput}</p>`;
+
+            document.getElementById("user-input").value = "";  // 清空輸入框
+
+            let response = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userInput })
+            });
+
+            let data = await response.json();
+            chatBox.innerHTML += `<p><strong>AI：</strong> ${data.response}</p>`;
+        }
+    </script>
+</head>
+<body>
+    <h2>DeepSeek AI Chat</h2>
+    <div id="chat-box" style="border:1px solid #ccc; padding:10px; width:400px; height:300px; overflow:auto;"></div>
+    <input type="text" id="user-input" placeholder="輸入你的問題">
+    <button onclick="sendMessage()">發送</button>
+</body>
+</html>
